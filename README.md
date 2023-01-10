@@ -22,6 +22,9 @@ To run:
 
 * Modify the bottom portion of the `scraper.py` file to include the desired URL and comment out the functions that you don't want to run.
 * From the `web-scraper` directory run `python scraper.py`.
+* The first prompt will ask you for the URL of the Wikipedia page you'd like to scrape. Either:
+  * Paste the desired URL (including `https://` header)
+  * Hit the Return key to scrape the default Wikipedia page.
 
 ### Resources
 
