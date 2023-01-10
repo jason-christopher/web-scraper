@@ -3,21 +3,25 @@ from bs4 import BeautifulSoup    # pip install beautifulsoup4
 import re
 
 
+# returns list of all <a> tags that have a title of "Wikipedia:Citation needed"
 def helper(r):
     soup = BeautifulSoup(r.text, "html.parser")
     return soup.find_all(title="Wikipedia:Citation needed")
 
 
+# takes in the text string from a header or <p> tag and removes the brackets and any text inside
 def polish(text):
     polished = re.sub(r"\[(.*?)\]", "", text)
     return polished
 
 
+# Uses the helper function to return a list of <a> tags and returns the number of citations needed
 def get_citations_needed_count(url):
     needs = helper(requests.get(url))
     print("Number of citations needed: ", len(needs))
 
 
+# Uses the helper function to return a list of <a> tags, then finds the parent <p> tag for each and returns the text
 def get_citations_needed_report(url):
     needs = helper(requests.get(url))
     for need in needs:
@@ -25,9 +29,12 @@ def get_citations_needed_report(url):
         print(text)
 
 
+# Uses the helper function to return a list of <a> tags, then finds its parent <h3> tag, then...
+# determines if it's already been printed, then finds the parent <p> tag for each and returns the text
 def get_citations_needed_by_section(url):
     needs = helper(requests.get(url))
     current_header = needs[0].find_previous("h3").text
+    print(current_header)
     print(polish(current_header) + "\n")
     for need in needs:
         if need.find_previous("h3").text != current_header:
