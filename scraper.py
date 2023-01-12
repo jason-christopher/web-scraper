@@ -12,12 +12,6 @@ def helper(r):
     return soup.find_all(title="Wikipedia:Citation needed")
 
 
-# takes in the text string from a header or <p> tag and removes the brackets and any text inside
-def polish(text):
-    polished = re.sub(r"\[(.*?)\]", "", text)
-    return polished
-
-
 # Uses the helper function to return a list of <a> tags and returns the number of citations needed
 def get_citations_needed_count(url):
     needs = helper(requests.get(url))
@@ -29,8 +23,7 @@ def get_citations_needed_report(url):
     try:
         needs = helper(requests.get(url))
         for need in needs:
-            text = polish(need.find_parent("p").text)
-            print(text)
+            print(need)
     except:
         print("No citations needed")
 
@@ -41,13 +34,12 @@ def get_citations_needed_by_section(url):
     try:
         needs = helper(requests.get(url))
         current_header = needs[0].find_previous("h3").text
-        print(polish(current_header) + "\n")
+        print(re.sub(r"\[(.*?)\]", "", current_header) + "\n")
         for need in needs:
             if need.find_previous("h3").text != current_header:
                 current_header = need.find_previous("h3").text
-                print(polish(current_header) + "\n")
-            text = polish(need.find_parent("p").text)
-            print(text)
+                print(re.sub(r"\[(.*?)\]", "", current_header) + "\n")
+            print(need.find_parent("p").text)
     except:
         print("No citations needed")
 
